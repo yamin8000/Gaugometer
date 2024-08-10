@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Gaugometer/Gaugometer.app.main
   ~     themes.xml Copyrighted by Yamin Siahmargooei at 2024/8/11
   ~     themes.xml Last modified at 2024/8/11
@@ -23,4 +22,11 @@
 <resources>
 
     <style name="Theme.Gaugometer" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#000000</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
+        <item name="windowSplashScreenAnimationDuration">200</item>
+        <item name="postSplashScreenTheme">@style/Theme.Gaugometer</item>
+    </style>
 </resources>

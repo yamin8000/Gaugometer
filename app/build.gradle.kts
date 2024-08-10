@@ -101,6 +101,11 @@ dependencies {
     implementation("androidx.compose.material3:material3:$material3Version")
     implementation("androidx.compose.material3:material3-window-size-class:$material3Version")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.4")
-    //
+    //navigation
+    val navVersion = "2.7.7"
+    implementation("androidx.navigation:navigation-compose:$navVersion")
+    //gauge
     implementation("com.github.yamin8000.gauge:Gauge:1.0.3")
+    //accompanist
+    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 }

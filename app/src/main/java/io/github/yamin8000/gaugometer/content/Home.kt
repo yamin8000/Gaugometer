@@ -21,19 +21,122 @@
 
 package io.github.yamin8000.gaugometer.content
 
+import android.Manifest
+import android.content.Context
+import android.content.Intent
+import android.provider.Settings
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BasicAlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.startActivity
+import androidx.core.os.bundleOf
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import io.github.yamin8000.gaugometer.R
+
 
 @Composable
 internal fun HomeScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    vm: HomeViewModel
 ) {
     Surface(
         modifier = modifier,
         content = {
-            Text("Hello There!")
+            PermissionRequestFeature {
+                val context = LocalContext.current
+                val isEnabled = vm.isEnabled.collectAsState().value
+                EnableGpsFeature(isEnabled, context)
+                Column {
+                    Text("Access Granted!")
+                    Text("Speed: ${vm.speed.collectAsState().value}")
+                    Text("Longitude: ${vm.longitude.collectAsState().value}")
+                    Text("Latitude: ${vm.latitude.collectAsState().value}")
+                }
+            }
         }
     )
 }
+
+@Composable
+private fun EnableGpsFeature(
+    isEnabled: Boolean,
+    context: Context
+) {
+    if (!isEnabled) {
+        //todo show a dialog before starting the dialog
+        val settingsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
+        startActivity(context, settingsIntent, bundleOf())
+    }
+}
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun PermissionRequestFeature(
+    onPermissionGranted: @Composable () -> Unit
+) {
+    val permissionState = rememberMultiplePermissionsState(
+        permissions = getLocationPermissions()
+    )
+    if (!permissionState.allPermissionsGranted) {
+        var isShowingPermissionRationalDialog by remember {
+            mutableStateOf(permissionState.shouldShowRationale)
+        }
+        if (isShowingPermissionRationalDialog) {
+            PermissionRationaleDialog(
+                onRequest = { permissionState.launchMultiplePermissionRequest() },
+                onDismissRequest = {
+                    isShowingPermissionRationalDialog = false
+                    permissionState.launchMultiplePermissionRequest()
+                }
+            )
+        } else LaunchedEffect(Unit) { permissionState.launchMultiplePermissionRequest() }
+    } else onPermissionGranted()
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun PermissionRationaleDialog(
+    onDismissRequest: () -> Unit,
+    onRequest: () -> Unit
+) {
+    BasicAlertDialog(
+        onDismissRequest = onDismissRequest,
+        content = {
+            Surface(
+                modifier = Modifier.padding(16.dp),
+                content = {
+                    Column(
+                        content = {
+                            Text(stringResource(R.string.location_permission_rational))
+                            Button(
+                                content = { Text(stringResource(R.string.ok)) },
+                                onClick = onRequest
+                            )
+                        }
+                    )
+                }
+            )
+        }
+    )
+}
+
+private fun getLocationPermissions() = listOf(
+    Manifest.permission.ACCESS_FINE_LOCATION,
+    Manifest.permission.ACCESS_COARSE_LOCATION
+)

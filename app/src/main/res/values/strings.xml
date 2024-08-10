@@ -21,4 +21,6 @@
 
 <resources>
     <string name="app_name">Gaugometer</string>
+    <string name="location_permission_rational">This app needs location permission in order to work.</string>
+    <string name="ok">OK</string>
 </resources>

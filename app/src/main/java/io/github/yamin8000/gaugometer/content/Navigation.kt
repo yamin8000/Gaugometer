@@ -21,8 +21,15 @@
 
 package io.github.yamin8000.gaugometer.content
 
+import android.content.Context
+import android.location.LocationManager
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -33,13 +40,26 @@ internal fun MainNavigation(
     modifier: Modifier = Modifier
 ) {
     val navController = rememberNavController()
+    val context = LocalContext.current
+    val locationManager = remember {
+        context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
+    val homeVM: HomeViewModel = viewModel(factory = viewModelFactory {
+        initializer {
+            HomeViewModel(
+                locationManager = locationManager
+            )
+        }
+    })
+
     NavHost(
         navController = navController,
         startDestination = Nav.Route.Home(),
         builder = {
             composable(Nav.Route.Home()) {
                 HomeScreen(
-                    modifier = modifier
+                    modifier = modifier,
+                    vm = homeVM
                 )
             }
         }

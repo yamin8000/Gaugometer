@@ -22,6 +22,7 @@
 package io.github.yamin8000.gaugometer.content
 
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -51,5 +52,7 @@ internal class MainActivity : ComponentActivity() {
                 }
             )
         }
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 }

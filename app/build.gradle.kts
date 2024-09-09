@@ -90,7 +90,7 @@ dependencies {
     implementation("androidx.core:core-splashscreen:1.0.1")
     //compose
     val material3Version = "1.2.1"
-    val composeLibsVersion = "1.6.8"
+    val composeLibsVersion = "1.7.0"
     val composeUiLibsVersion = "1.6.8"
     implementation("androidx.compose.ui:ui:$composeUiLibsVersion")
     implementation("androidx.compose.material:material:$composeLibsVersion")

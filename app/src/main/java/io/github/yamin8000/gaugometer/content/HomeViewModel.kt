@@ -28,7 +28,6 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-
 @SuppressLint("MissingPermission")
 internal class HomeViewModel(
     locationManager: LocationManager,

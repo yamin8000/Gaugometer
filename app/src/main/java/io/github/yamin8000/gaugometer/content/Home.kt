@@ -45,10 +45,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.bundleOf
+import com.github.yamin8000.gauge.main.Gauge
+import com.github.yamin8000.gauge.main.GaugeNumerics
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.github.yamin8000.gaugometer.R
-
 
 @Composable
 internal fun HomeScreen(
@@ -63,10 +64,21 @@ internal fun HomeScreen(
                 val isEnabled = vm.isEnabled.collectAsState().value
                 EnableGpsFeature(isEnabled, context)
                 Column {
+                    val speed = vm.speed.collectAsState().value
                     Text("Access Granted!")
-                    Text("Speed: ${vm.speed.collectAsState().value}")
+                    Text("Speed: $speed")
                     Text("Longitude: ${vm.longitude.collectAsState().value}")
                     Text("Latitude: ${vm.latitude.collectAsState().value}")
+                    Gauge(
+                        value = speed,
+                        numerics = GaugeNumerics(
+                            startAngle = 150,
+                            sweepAngle = 240,
+                            valueRange = 0f..220f,
+                            smallTicksStep = 1,
+                            bigTicksStep = 20
+                        ),
+                    )
                 }
             }
         }

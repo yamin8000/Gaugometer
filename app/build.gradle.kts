@@ -32,7 +32,7 @@ android {
     defaultConfig {
         applicationId = "io.github.yamin8000.gaugometer"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0.0"
         base.archivesName = "$applicationId-v$versionCode-n$versionName"
@@ -85,8 +85,6 @@ android {
 dependencies {
     //core android/kotlin
     implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.4")
-    implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.7")
     implementation("androidx.core:core-splashscreen:1.0.1")
     //compose
     val material3Version = "1.2.1"
@@ -100,12 +98,13 @@ dependencies {
     implementation("androidx.compose.material:material-icons-extended:$composeLibsVersion")
     implementation("androidx.compose.material3:material3:$material3Version")
     implementation("androidx.compose.material3:material3-window-size-class:$material3Version")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.4")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.6")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
     //navigation
-    val navVersion = "2.7.7"
+    val navVersion = "2.8.1"
     implementation("androidx.navigation:navigation-compose:$navVersion")
     //gauge
-    implementation("com.github.yamin8000.gauge:Gauge:1.0.3")
+    implementation("com.github.yamin8000.gauge:Gauge:1.0.4")
     //accompanist
     implementation("com.google.accompanist:accompanist-permissions:0.34.0")
 }

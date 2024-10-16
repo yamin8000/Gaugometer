@@ -101,7 +101,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.6")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
     //navigation
-    val navVersion = "2.8.1"
+    val navVersion = "2.8.3"
     implementation("androidx.navigation:navigation-compose:$navVersion")
     //gauge
     implementation("com.github.yamin8000.gauge:Gauge:1.0.4")

@@ -91,5 +91,5 @@ dependencies {
     //gauge
     implementation("com.github.yamin8000.gauge:Gauge:1.0.4")
     //accompanist
-    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+    implementation("com.google.accompanist:accompanist-permissions:0.37.3")
 }

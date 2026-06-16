@@ -86,7 +86,7 @@ dependencies {
     implementation(project(":core"))
     implementation("androidx.core:core-splashscreen:1.0.1")
     //navigation
-    val navVersion = "2.8.1"
+    val navVersion = "2.9.8"
     implementation("androidx.navigation:navigation-compose:$navVersion")
     //gauge
     implementation("com.github.yamin8000.gauge:Gauge:1.0.4")

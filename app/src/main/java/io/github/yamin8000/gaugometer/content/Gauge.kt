@@ -1,7 +1,7 @@
 /*
  *     Gaugometer/Gaugometer.app.main
- *     Home.kt Copyrighted by Yamin Siahmargooei at 2024/8/11
- *     Home.kt Last modified at 2024/8/11
+ *     Gauge.kt Copyrighted by Yamin Siahmargooei at 2024/8/11
+ *     Gauge.kt Last modified at 2024/8/11
  *     This file is part of Gaugometer/Gaugometer.app.main.
  *     Copyright (C) 2024  Yamin Siahmargooei
  *
@@ -52,9 +52,9 @@ import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import io.github.yamin8000.gaugometer.R
 
 @Composable
-internal fun HomeScreen(
+internal fun GaugeScreen(
     modifier: Modifier = Modifier,
-    vm: HomeViewModel
+    vm: GaugeViewModel
 ) {
     Surface(
         modifier = modifier,

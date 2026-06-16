@@ -29,7 +29,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
 @SuppressLint("MissingPermission")
-internal class HomeViewModel(
+internal class GaugeViewModel(
     locationManager: LocationManager,
 ) : ViewModel() {
 
@@ -45,6 +45,9 @@ internal class HomeViewModel(
     private var _longitude = MutableStateFlow(0.0)
     val longitude = _longitude.asStateFlow()
 
+    private var _hasPermission = MutableStateFlow(false)
+    val hasPermission = _hasPermission.asStateFlow()
+
     private val locationListener = LocationListener { location ->
         _speed.value = location.speed
         _latitude.value = location.latitude
@@ -54,11 +57,13 @@ internal class HomeViewModel(
     init {
         _isEnabled.value = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
 
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            0,
-            0f,
-            locationListener
-        )
+        if (hasPermission.value) {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                0,
+                0f,
+                locationListener
+            )
+        }
     }
 }

@@ -19,7 +19,7 @@
  *     along with Gaugometer.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.yamin8000.gaugometer.ui.theme
+package io.github.yamin8000.gaugometer.core.ui.theme
 
 import android.app.Activity
 import android.os.Build

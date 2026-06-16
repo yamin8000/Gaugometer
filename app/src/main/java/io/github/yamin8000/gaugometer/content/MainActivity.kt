@@ -31,7 +31,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import io.github.yamin8000.gaugometer.ui.theme.AppTheme
+import io.github.yamin8000.gaugometer.core.ui.theme.AppTheme
 
 internal class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,7 +46,9 @@ internal class MainActivity : ComponentActivity() {
                     Scaffold(
                         modifier = Modifier.fillMaxSize(),
                         content = { innerPadding ->
-                            MainNavigation(modifier = Modifier.padding(innerPadding))
+                            MainNavigation(
+                                modifier = Modifier.padding(innerPadding)
+                            )
                         }
                     )
                 }

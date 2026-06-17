@@ -21,24 +21,21 @@
 
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
     namespace = "io.github.yamin8000.gaugometer"
-    compileSdk = 35
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "io.github.yamin8000.gaugometer"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 37
         versionCode = 1
         versionName = "1.0.0"
         base.archivesName = "$applicationId-v$versionCode-n$versionName"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -56,13 +53,8 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-
-    kotlinOptions {
-        jvmTarget = "17"
-        languageVersion = "1.9"
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
 
     buildFeatures {
@@ -75,21 +67,16 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
-
-    kotlin.sourceSets.configureEach {
-        languageSettings.enableLanguageFeature("DataObjects")
-    }
 }
 
 dependencies {
     //core
     implementation(project(":core"))
-    implementation("androidx.core:core-splashscreen:1.0.1")
+    implementation(libs.androidx.core.splashscreen)
     //navigation
-    val navVersion = "2.8.1"
-    implementation("androidx.navigation:navigation-compose:$navVersion")
+    implementation(libs.androidx.navigation.compose)
     //gauge
-    implementation("com.github.yamin8000.gauge:Gauge:1.0.4")
+    implementation(libs.yamin8000.gauge)
     //accompanist
-    implementation("com.google.accompanist:accompanist-permissions:0.34.0")
+    implementation(libs.google.accompanist.permissions)
 }

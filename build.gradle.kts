@@ -20,9 +20,9 @@
  */
 
 plugins {
-    val kotlinVersion = "2.0.10"
-    id("com.android.application") version "8.13.2" apply false
+    val kotlinVersion = "2.2.10"
+    id("com.android.application") version "9.2.1" apply false
     id("org.jetbrains.kotlin.android") version kotlinVersion apply false
     id("org.jetbrains.kotlin.plugin.compose") version kotlinVersion apply false
-    id("com.android.library") version "8.13.2" apply false
+    id("com.android.library") version "9.2.1" apply false
 }

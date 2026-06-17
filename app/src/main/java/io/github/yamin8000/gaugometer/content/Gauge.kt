@@ -22,7 +22,6 @@
 package io.github.yamin8000.gaugometer.content
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.layout.Column
@@ -43,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat.startActivity
 import androidx.core.os.bundleOf
 import com.github.yamin8000.gauge.main.Gauge
 import com.github.yamin8000.gauge.main.GaugeNumerics
@@ -60,9 +58,8 @@ internal fun GaugeScreen(
         modifier = modifier,
         content = {
             PermissionRequestFeature {
-                val context = LocalContext.current
                 val isEnabled = vm.isEnabled.collectAsState().value
-                EnableGpsFeature(isEnabled, context)
+                EnableGpsFeature(isEnabled)
                 Column {
                     val speed = vm.speed.collectAsState().value
                     Text("Access Granted!")
@@ -88,12 +85,11 @@ internal fun GaugeScreen(
 @Composable
 private fun EnableGpsFeature(
     isEnabled: Boolean,
-    context: Context
 ) {
     if (!isEnabled) {
         //todo show a dialog before starting the dialog
         val settingsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-        startActivity(context, settingsIntent, bundleOf())
+        LocalContext.current.startActivity(settingsIntent, bundleOf())
     }
 }
 

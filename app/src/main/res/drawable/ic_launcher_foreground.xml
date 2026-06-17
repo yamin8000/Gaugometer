@@ -1,3 +1,24 @@
+<!--
+  ~     Gaugometer/Gaugometer.app.main
+  ~     ic_launcher_foreground.xml Copyrighted by Yamin Siahmargooei at 2026/6/17
+  ~     ic_launcher_foreground.xml Last modified at 2026/6/16
+  ~     This file is part of Gaugometer/Gaugometer.app.main.
+  ~     Copyright (C) 2026  Yamin Siahmargooei
+  ~
+  ~     Gaugometer/Gaugometer.app.main is free software: you can redistribute it and/or modify
+  ~     it under the terms of the GNU General Public License as published by
+  ~     the Free Software Foundation, either version 3 of the License, or
+  ~     (at your option) any later version.
+  ~
+  ~     Gaugometer/Gaugometer.app.main is distributed in the hope that it will be useful,
+  ~     but WITHOUT ANY WARRANTY; without even the implied warranty of
+  ~     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  ~     GNU General Public License for more details.
+  ~
+  ~     You should have received a copy of the GNU General Public License
+  ~     along with Gaugometer.  If not, see <https://www.gnu.org/licenses/>.
+  -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"

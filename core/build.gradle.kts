@@ -1,6 +1,29 @@
+/*
+ *     Gaugometer/Gaugometer.core
+ *     build.gradle.kts Copyrighted by Yamin Siahmargooei at 2026/6/17
+ *     build.gradle.kts Last modified at 2026/6/17
+ *     This file is part of Gaugometer/Gaugometer.core.
+ *     Copyright (C) 2026  Yamin Siahmargooei
+ *
+ *     Gaugometer/Gaugometer.core is free software: you can redistribute it and/or modify
+ *     it under the terms of the GNU General Public License as published by
+ *     the Free Software Foundation, either version 3 of the License, or
+ *     (at your option) any later version.
+ *
+ *     Gaugometer/Gaugometer.core is distributed in the hope that it will be useful,
+ *     but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *     GNU General Public License for more details.
+ *
+ *     You should have received a copy of the GNU General Public License
+ *     along with Gaugometer.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 plugins {
-    id("com.android.library")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.jetbrains.kotlin.compose.plugin)
+    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -23,6 +46,10 @@ android {
 dependencies {
     //core android/kotlin
     api(libs.androidx.core.ktx)
+    //hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.lifecycle.compose)
     //compose
     api(libs.androidx.ui)
     api(libs.androidx.material)

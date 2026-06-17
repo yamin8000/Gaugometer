@@ -10,6 +10,11 @@ androidx-material3 = "1.4.0"
 androidx-material3-window = "1.4.0"
 androidx-compose-lifecycle = "2.10.0"
 androidx-navigation-compose = "2.9.8"
+ksp = "2.3.9"
+kotlin = "2.3.21"
+android-application = "9.2.1"
+hilt = "2.59.2"
+hilt-compose = "1.3.0"
 
 [libraries]
 google-accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "google-accompanist-permissions" }
@@ -27,5 +32,13 @@ androidx-material = { module = "androidx.compose.material:material", version.ref
 androidx-ui = { module = "androidx.compose.ui:ui", version.ref = "androidx-compose" }
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidx-core-ktx" }
 yamin8000-gauge = { module = "com.github.yamin8000.gauge:Gauge", version.ref = "yamin8000-gauge" }
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+hilt-lifecycle-compose = { module = "androidx.hilt:hilt-lifecycle-viewmodel-compose", version.ref = "hilt-compose" }
 
 [plugins]
+android-application = { id = "com.android.application", version.ref = "android-application" }
+android-library = { id = "com.android.library", version.ref = "android-application" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+jetbrains-kotlin-compose-plugin = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+google-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

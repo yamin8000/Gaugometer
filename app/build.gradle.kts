@@ -20,8 +20,10 @@
  */
 
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.plugin.compose")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.jetbrains.kotlin.compose.plugin)
+    alias(libs.plugins.google.ksp)
+    alias(libs.plugins.hilt)
 }
 
 android {
@@ -59,12 +61,18 @@ android {
 
     buildFeatures {
         compose = true
-        buildConfig = true
+    }
+
+    dependenciesInfo {
+        includeInApk = false
+        includeInBundle = false
     }
 
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "/en/*"
+            excludes += "/*.yml"
         }
     }
 }
@@ -73,6 +81,10 @@ dependencies {
     //core
     implementation(project(":core"))
     implementation(libs.androidx.core.splashscreen)
+    //hilt
+    implementation(libs.hilt.android)
+    ksp(libs.hilt.android.compiler)
+    implementation(libs.hilt.lifecycle.compose)
     //navigation
     implementation(libs.androidx.navigation.compose)
     //gauge

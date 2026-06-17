@@ -33,7 +33,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -44,6 +43,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.yamin8000.gauge.main.Gauge
 import com.github.yamin8000.gauge.main.GaugeNumerics
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -55,20 +55,20 @@ fun GaugeScreen(
     modifier: Modifier = Modifier,
     vm: GaugeViewModel = hiltViewModel()
 ) {
+    val state = vm.state.collectAsStateWithLifecycle().value
+
     Surface(
         modifier = modifier,
         content = {
             PermissionRequestFeature {
-                val isEnabled = vm.isEnabled.collectAsState().value
-                EnableGpsFeature(isEnabled)
+                EnableGpsFeature(state.isGpsEnabled)
                 Column {
-                    val speed = vm.speed.collectAsState().value
                     Text("Access Granted!")
-                    Text("Speed: $speed")
-                    Text("Longitude: ${vm.longitude.collectAsState().value}")
-                    Text("Latitude: ${vm.latitude.collectAsState().value}")
+                    Text("Speed: ${state.rawSpeed}")
+                    Text("Longitude: ${state.longitude}")
+                    Text("Latitude: ${state.longitude}")
                     Gauge(
-                        value = speed,
+                        value = state.rawSpeed,
                         numerics = GaugeNumerics(
                             startAngle = 150,
                             sweepAngle = 240,

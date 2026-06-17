@@ -21,52 +21,49 @@
 
 package io.github.yamin8000.gaugometer.core.ui
 
-import android.annotation.SuppressLint
 import android.location.LocationListener
 import android.location.LocationManager
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
-@SuppressLint("MissingPermission")
 @HiltViewModel
 class GaugeViewModel @Inject constructor(
-    locationManager: LocationManager,
+    private val locationManager: LocationManager,
 ) : ViewModel() {
 
-    private var _isEnabled = MutableStateFlow(false)
-    val isEnabled = _isEnabled.asStateFlow()
-
-    private var _speed = MutableStateFlow(0f)
-    val speed = _speed.asStateFlow()
-
-    private var _latitude = MutableStateFlow(0.0)
-    val latitude = _latitude.asStateFlow()
-
-    private var _longitude = MutableStateFlow(0.0)
-    val longitude = _longitude.asStateFlow()
-
-    private var _hasPermission = MutableStateFlow(false)
-    val hasPermission = _hasPermission.asStateFlow()
+    private var _state = MutableStateFlow(GaugeState())
+    val state = _state.asStateFlow()
 
     private val locationListener = LocationListener { location ->
-        _speed.value = location.speed
-        _latitude.value = location.latitude
-        _longitude.value = location.longitude
+        _state.update {
+            it.copy(
+                rawSpeed = location.speed,
+                latitude = location.latitude,
+                longitude = location.longitude
+            )
+        }
     }
 
     init {
-        _isEnabled.value = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        _state.update { it.copy(isGpsEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) }
+    }
 
-        if (hasPermission.value) {
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                0,
-                0f,
-                locationListener
-            )
+    fun onAction(action: GaugeAction) {
+        when (action) {
+            GaugeAction.Refresh -> {
+                if (state.value.hasLocationPermission) {
+                    locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,
+                        0,
+                        0f,
+                        locationListener
+                    )
+                }
+            }
         }
     }
 }

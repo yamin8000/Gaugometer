@@ -80,6 +80,7 @@ android {
 dependencies {
     //core
     implementation(project(":core"))
+    implementation(project(":gauge"))
     implementation(libs.androidx.core.splashscreen)
     //hilt
     implementation(libs.hilt.android)
@@ -87,8 +88,4 @@ dependencies {
     implementation(libs.hilt.lifecycle.compose)
     //navigation
     implementation(libs.androidx.navigation.compose)
-    //gauge
-    implementation(libs.yamin8000.gauge)
-    //accompanist
-    implementation(libs.google.accompanist.permissions)
 }

@@ -1,16 +1,16 @@
 /*
- *     Gaugometer/Gaugometer.app.main
- *     Gauge.kt Copyrighted by Yamin Siahmargooei at 2024/8/11
- *     Gauge.kt Last modified at 2024/8/11
- *     This file is part of Gaugometer/Gaugometer.app.main.
- *     Copyright (C) 2024  Yamin Siahmargooei
+ *     Gaugometer/Gaugometer.gauge.main
+ *     Gauge.kt Copyrighted by Yamin Siahmargooei at 2026/6/17
+ *     Gauge.kt Last modified at 2026/6/17
+ *     This file is part of Gaugometer/Gaugometer.gauge.main.
+ *     Copyright (C) 2026  Yamin Siahmargooei
  *
- *     Gaugometer/Gaugometer.app.main is free software: you can redistribute it and/or modify
+ *     Gaugometer/Gaugometer.gauge.main is free software: you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
  *     the Free Software Foundation, either version 3 of the License, or
  *     (at your option) any later version.
  *
- *     Gaugometer/Gaugometer.app.main is distributed in the hope that it will be useful,
+ *     Gaugometer/Gaugometer.gauge.main is distributed in the hope that it will be useful,
  *     but WITHOUT ANY WARRANTY; without even the implied warranty of
  *     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *     GNU General Public License for more details.
@@ -19,7 +19,7 @@
  *     along with Gaugometer.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.yamin8000.gaugometer.content
+package io.github.yamin8000.gaugometer.core.ui
 
 import android.Manifest
 import android.content.Intent
@@ -43,16 +43,17 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.github.yamin8000.gauge.main.Gauge
 import com.github.yamin8000.gauge.main.GaugeNumerics
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import io.github.yamin8000.gaugometer.R
+import io.github.yamin8000.gaugometer.guage.R
 
 @Composable
-internal fun GaugeScreen(
+fun GaugeScreen(
     modifier: Modifier = Modifier,
-    vm: GaugeViewModel
+    vm: GaugeViewModel = hiltViewModel()
 ) {
     Surface(
         modifier = modifier,

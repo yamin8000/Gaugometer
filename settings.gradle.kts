@@ -57,3 +57,4 @@ dependencyResolutionManagement {
 rootProject.name = "Gaugometer"
 include(":app")
 include(":core")
+include(":gauge")

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~     Gaugometer/Gaugometer.gauge.main
   ~     AndroidManifest.xml Copyrighted by Yamin Siahmargooei at 2026/6/17
   ~     AndroidManifest.xml Last modified at 2026/6/17
@@ -22,4 +21,6 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 </manifest>

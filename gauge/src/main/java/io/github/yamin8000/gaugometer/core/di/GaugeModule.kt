@@ -28,6 +28,8 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import io.github.yamin8000.gaugometer.core.data.repository.AndroidPermissionCheckerRepository
+import io.github.yamin8000.gaugometer.core.domain.repository.PermissionCheckerRepository
 import javax.inject.Singleton
 
 @Module
@@ -40,5 +42,13 @@ object GaugeModule {
         @ApplicationContext context: Context
     ): LocationManager {
         return context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
+
+    @Provides
+    @Singleton
+    fun providesPermissionCheckerRepository(
+        @ApplicationContext context: Context
+    ): PermissionCheckerRepository {
+        return AndroidPermissionCheckerRepository(context)
     }
 }

@@ -1,7 +1,7 @@
 /*
  *     Gaugometer/Gaugometer.gauge.main
- *     GaugeEvent.kt Copyrighted by Yamin Siahmargooei at 2026/6/17
- *     GaugeEvent.kt Last modified at 2026/6/17
+ *     AndroidPermissionCheckerRepository.kt Copyrighted by Yamin Siahmargooei at 2026/6/17
+ *     AndroidPermissionCheckerRepository.kt Last modified at 2026/6/17
  *     This file is part of Gaugometer/Gaugometer.gauge.main.
  *     Copyright (C) 2026  Yamin Siahmargooei
  *
@@ -19,9 +19,16 @@
  *     along with Gaugometer.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-package io.github.yamin8000.gaugometer.core.ui
+package io.github.yamin8000.gaugometer.core.data.repository
 
-sealed interface GaugeEvent {
-    data object LocationPermissionNeeded : GaugeEvent
-    data object RequestEnablingLocation : GaugeEvent
+import android.content.Context
+import android.content.pm.PackageManager
+import io.github.yamin8000.gaugometer.core.domain.repository.PermissionCheckerRepository
+
+class AndroidPermissionCheckerRepository(
+    private val context: Context
+) : PermissionCheckerRepository {
+    override fun hasPermission(permission: String): Boolean {
+        return context.checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED
+    }
 }

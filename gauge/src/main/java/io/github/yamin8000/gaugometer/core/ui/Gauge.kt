@@ -21,34 +21,19 @@
 
 package io.github.yamin8000.gaugometer.core.ui
 
-import android.Manifest
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.BasicAlertDialog
-import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.yamin8000.gauge.main.Gauge
 import com.github.yamin8000.gauge.main.GaugeNumerics
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import io.github.yamin8000.gaugometer.guage.R
+import io.github.yamin8000.gaugometer.core.util.ObserverEvent
 
 @Composable
 fun GaugeScreen(
@@ -57,18 +42,46 @@ fun GaugeScreen(
 ) {
     val state = vm.state.collectAsStateWithLifecycle().value
 
+    val context = LocalContext.current
+    ObserverEvent(vm.eventChannelFlow) { event ->
+        when (event) {
+            GaugeEvent.LocationPermissionNeeded -> {
+
+            }
+
+            GaugeEvent.RequestEnablingLocation -> {
+                //todo show a dialog before starting the dialog
+                context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+            }
+        }
+    }
+
+    AppGauge(
+        modifier = modifier,
+        rawSpeed = state.rawSpeed,
+        longitude = state.longitude,
+        latitude = state.latitude
+    )
+}
+
+@Composable
+internal fun AppGauge(
+    modifier: Modifier = Modifier,
+    rawSpeed: Float,
+    longitude: Double,
+    latitude: Double
+) {
     Surface(
         modifier = modifier,
         content = {
-            PermissionRequestFeature {
-                EnableGpsFeature(state.isGpsEnabled)
-                Column {
+            Column(
+                content = {
                     Text("Access Granted!")
-                    Text("Speed: ${state.rawSpeed}")
-                    Text("Longitude: ${state.longitude}")
-                    Text("Latitude: ${state.longitude}")
+                    Text("Speed: $rawSpeed")
+                    Text("Longitude: $longitude")
+                    Text("Latitude: $latitude")
                     Gauge(
-                        value = state.rawSpeed,
+                        value = rawSpeed,
                         numerics = GaugeNumerics(
                             startAngle = 150,
                             sweepAngle = 240,
@@ -78,74 +91,7 @@ fun GaugeScreen(
                         ),
                     )
                 }
-            }
-        }
-    )
-}
-
-@Composable
-private fun EnableGpsFeature(
-    isEnabled: Boolean,
-) {
-    if (!isEnabled) {
-        //todo show a dialog before starting the dialog
-        val settingsIntent = Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-        LocalContext.current.startActivity(settingsIntent, bundleOf())
-    }
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-private fun PermissionRequestFeature(
-    onPermissionGranted: @Composable () -> Unit
-) {
-    val permissionState = rememberMultiplePermissionsState(
-        permissions = getLocationPermissions()
-    )
-    if (!permissionState.allPermissionsGranted) {
-        var isShowingPermissionRationalDialog by remember {
-            mutableStateOf(permissionState.shouldShowRationale)
-        }
-        if (isShowingPermissionRationalDialog) {
-            PermissionRationaleDialog(
-                onRequest = { permissionState.launchMultiplePermissionRequest() },
-                onDismissRequest = {
-                    isShowingPermissionRationalDialog = false
-                    permissionState.launchMultiplePermissionRequest()
-                }
-            )
-        } else LaunchedEffect(Unit) { permissionState.launchMultiplePermissionRequest() }
-    } else onPermissionGranted()
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun PermissionRationaleDialog(
-    onDismissRequest: () -> Unit,
-    onRequest: () -> Unit
-) {
-    BasicAlertDialog(
-        onDismissRequest = onDismissRequest,
-        content = {
-            Surface(
-                modifier = Modifier.padding(16.dp),
-                content = {
-                    Column(
-                        content = {
-                            Text(stringResource(R.string.location_permission_rational))
-                            Button(
-                                content = { Text(stringResource(R.string.ok)) },
-                                onClick = onRequest
-                            )
-                        }
-                    )
-                }
             )
         }
     )
 }
-
-private fun getLocationPermissions() = listOf(
-    Manifest.permission.ACCESS_FINE_LOCATION,
-    Manifest.permission.ACCESS_COARSE_LOCATION
-)

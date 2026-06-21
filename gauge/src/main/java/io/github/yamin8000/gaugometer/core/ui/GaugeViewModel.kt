@@ -51,9 +51,10 @@ class GaugeViewModel @Inject constructor(
 
     private val exceptionHandler = CoroutineExceptionHandler { _, throwable ->
         log(throwable.stackTraceToString())
+        scope.launch { errorChannel.send(throwable) }
     }
 
-    private val scope = CoroutineScope(
+    private val scope: CoroutineScope = CoroutineScope(
         SupervisorJob() + viewModelScope.coroutineContext + exceptionHandler
     )
 
@@ -62,6 +63,9 @@ class GaugeViewModel @Inject constructor(
 
     private var eventChannel = Channel<GaugeEvent>()
     val eventChannelFlow = eventChannel.receiveAsFlow()
+
+    private var errorChannel = Channel<Throwable>()
+    val errorChannelFlow = errorChannel.receiveAsFlow()
 
     private val locationListener = LocationListener { location ->
         _state.update {
@@ -90,13 +94,7 @@ class GaugeViewModel @Inject constructor(
                     ) {
                         refreshLocation()
                     } else {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
+                        scope.launch { eventChannel.send(GaugeEvent.LocationPermissionNeeded) }
                     }
                 }
             }
@@ -105,11 +103,15 @@ class GaugeViewModel @Inject constructor(
 
     @SuppressLint("MissingPermission")
     private fun refreshLocation() {
-        locationManager.requestLocationUpdates(
-            LocationManager.GPS_PROVIDER,
-            0,
-            0f,
-            locationListener
-        )
+        try {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                500,
+                .5f,
+                locationListener
+            )
+        } catch (e: Exception) {
+            scope.launch { errorChannel.send(e) }
+        }
     }
 }

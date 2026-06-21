@@ -27,4 +27,7 @@ data class GaugeState(
     val latitude: Double = 0.0,
     val longitude: Double = 0.0,
     val hasLocationPermission: Boolean = false
-)
+) {
+    fun getSpeedKmh() = rawSpeed * 3.6f
+    fun getSpeedMph() = rawSpeed * 2.23694f
+}

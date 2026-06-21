@@ -29,10 +29,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.yamin8000.gauge.main.Gauge
 import com.github.yamin8000.gauge.main.GaugeNumerics
+import io.github.yamin8000.gaugometer.core.ui.theme.AppTheme
 import io.github.yamin8000.gaugometer.core.util.ObserverEvent
 
 @Composable
@@ -56,30 +58,37 @@ fun GaugeScreen(
         }
     }
 
+    ObserverEvent(vm.errorChannelFlow) { error ->
+
+    }
+
     AppGauge(
         modifier = modifier,
-        rawSpeed = state.rawSpeed,
-        longitude = state.longitude,
-        latitude = state.latitude
+        rawSpeed = state.getSpeedKmh()
     )
+}
+
+@Preview
+@Composable
+private fun Preview() {
+    AppTheme {
+        AppGauge(
+            rawSpeed = 50f
+        )
+    }
 }
 
 @Composable
 internal fun AppGauge(
     modifier: Modifier = Modifier,
-    rawSpeed: Float,
-    longitude: Double,
-    latitude: Double
+    rawSpeed: Float
 ) {
     Surface(
         modifier = modifier,
         content = {
             Column(
                 content = {
-                    Text("Access Granted!")
                     Text("Speed: $rawSpeed")
-                    Text("Longitude: $longitude")
-                    Text("Latitude: $latitude")
                     Gauge(
                         value = rawSpeed,
                         numerics = GaugeNumerics(
@@ -88,7 +97,7 @@ internal fun AppGauge(
                             valueRange = 0f..220f,
                             smallTicksStep = 1,
                             bigTicksStep = 20
-                        ),
+                        )
                     )
                 }
             )

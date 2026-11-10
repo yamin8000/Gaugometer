@@ -24,9 +24,16 @@ package io.github.yamin8000.gaugometer.core.ui
 import android.content.Intent
 import android.provider.Settings
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,9 +41,18 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.github.yamin8000.gauge.main.Gauge
 import com.github.yamin8000.gauge.main.GaugeNumerics
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import io.github.yamin8000.gaugometer.core.ui.components.GpsEnableRequestDialog
+import io.github.yamin8000.gaugometer.core.ui.components.PermissionRationaleDialog
 import io.github.yamin8000.gaugometer.core.ui.theme.AppTheme
+import io.github.yamin8000.gaugometer.core.ui.theme.Sizes
 import io.github.yamin8000.gaugometer.core.util.ObserverEvent
+import io.github.yamin8000.gaugometer.core.util.Utility.getLocationPermissions
+import kotlin.random.Random
+import kotlin.random.nextInt
 
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun GaugeScreen(
     modifier: Modifier = Modifier,
@@ -44,16 +60,31 @@ fun GaugeScreen(
 ) {
     val state = vm.state.collectAsStateWithLifecycle().value
 
+
+    val permissionState = rememberMultiplePermissionsState(
+        permissions = getLocationPermissions()
+    )
+    if (!permissionState.allPermissionsGranted) {
+        vm.onAction(GaugeAction.OnChangePermissionDialogState(permissionState.shouldShowRationale))
+        var isShowingPermissionRationalDialog by remember {
+            mutableStateOf(permissionState.shouldShowRationale)
+        }
+        if (!isShowingPermissionRationalDialog) {
+            LaunchedEffect(Unit) {
+                permissionState.launchMultiplePermissionRequest()
+            }
+        }
+    } else vm.onAction(GaugeAction.OnPermissionGranted)
+
     val context = LocalContext.current
     ObserverEvent(vm.eventChannelFlow) { event ->
         when (event) {
             GaugeEvent.LocationPermissionNeeded -> {
-
+                vm.onAction(GaugeAction.OnChangePermissionDialogState(true))
             }
 
             GaugeEvent.RequestEnablingLocation -> {
-                //todo show a dialog before starting the dialog
-                context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+                vm.onAction(GaugeAction.OnChangeGpsDialogState(true))
             }
         }
     }
@@ -62,9 +93,27 @@ fun GaugeScreen(
 
     }
 
-    AppGauge(
+    if (state.isShowingPermissionRequestDialog) {
+        PermissionRationaleDialog(
+            onDismissRequest = { vm.onAction(GaugeAction.OnChangePermissionDialogState(false)) },
+            onRequest = { permissionState.launchMultiplePermissionRequest() }
+        )
+    }
+
+    if (state.isShowingGpsEnableRequestDialog) {
+        GpsEnableRequestDialog(
+            onDismissRequest = { vm.onAction(GaugeAction.OnChangeGpsDialogState(false)) },
+            onRequest = { context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)) }
+        )
+    }
+
+    GaugeContent(
         modifier = modifier,
-        rawSpeed = state.getSpeedKmh()
+        rawSpeed = state.getSpeedKmh(),
+        hasLocationPermissions = state.hasLocationPermission,
+        isGpsOn = state.isGpsEnabled,
+        location = "${state.latitude}, ${state.longitude}",
+        onRefresh = { vm.onAction(GaugeAction.Refresh) }
     )
 }
 
@@ -72,22 +121,44 @@ fun GaugeScreen(
 @Composable
 private fun Preview() {
     AppTheme {
-        AppGauge(
-            rawSpeed = 50f
+        GaugeContent(
+            rawSpeed = Random.nextInt(0..250).toFloat(),
+            isGpsOn = Random.nextBoolean(),
+            hasLocationPermissions = Random.nextBoolean(),
+            location = "",
+            onRefresh = {}
         )
     }
 }
 
 @Composable
-internal fun AppGauge(
-    modifier: Modifier = Modifier,
-    rawSpeed: Float
+internal fun GaugeContent(
+    rawSpeed: Float,
+    isGpsOn: Boolean,
+    hasLocationPermissions: Boolean,
+    location: String,
+    onRefresh: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
     Surface(
         modifier = modifier,
         content = {
             Column(
+                modifier = Modifier.padding(Sizes.Medium),
                 content = {
+                    Text(
+                        text = "GPS: $isGpsOn"
+                    )
+                    Text(
+                        text = "Permission: $hasLocationPermissions"
+                    )
+                    Text(
+                        text = location
+                    )
+                    Button(
+                        onClick = onRefresh,
+                        content = { Text(text = "Refresh") }
+                    )
                     Text("Speed: $rawSpeed")
                     Gauge(
                         value = rawSpeed,

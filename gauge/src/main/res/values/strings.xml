@@ -22,4 +22,5 @@
 <resources>
     <string name="location_permission_rational">This app needs location permission in order to work.</string>
     <string name="ok">OK</string>
+    <string name="gps_enable_notice">This app needs GPS to be enabled in order to work.</string>
 </resources>

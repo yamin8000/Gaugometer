@@ -43,7 +43,9 @@ import io.github.yamin8000.gaugometer.ui.navigation.Nav
 internal class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
+
         super.onCreate(savedInstanceState)
+
         enableEdgeToEdge()
 
         setContent {

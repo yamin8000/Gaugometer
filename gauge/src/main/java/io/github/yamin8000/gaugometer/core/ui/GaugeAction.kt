@@ -23,4 +23,7 @@ package io.github.yamin8000.gaugometer.core.ui
 
 sealed interface GaugeAction {
     data object Refresh : GaugeAction
+    data object OnPermissionGranted : GaugeAction
+    data class OnChangePermissionDialogState(val visibility: Boolean) : GaugeAction
+    data class OnChangeGpsDialogState(val visibility: Boolean) : GaugeAction
 }

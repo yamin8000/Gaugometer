@@ -23,10 +23,8 @@ package io.github.yamin8000.gaugometer.core.ui
 
 import android.Manifest
 import android.annotation.SuppressLint
-import android.content.pm.PackageManager
 import android.location.LocationListener
 import android.location.LocationManager
-import androidx.core.app.ActivityCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -97,6 +95,18 @@ class GaugeViewModel @Inject constructor(
                         scope.launch { eventChannel.send(GaugeEvent.LocationPermissionNeeded) }
                     }
                 }
+            }
+
+            GaugeAction.OnPermissionGranted -> {
+                _state.update { it.copy(hasLocationPermission = true) }
+            }
+
+            is GaugeAction.OnChangeGpsDialogState -> {
+                _state.update { it.copy(isShowingGpsEnableRequestDialog = action.visibility) }
+            }
+
+            is GaugeAction.OnChangePermissionDialogState -> {
+                _state.update { it.copy(isShowingPermissionRequestDialog = action.visibility) }
             }
         }
     }

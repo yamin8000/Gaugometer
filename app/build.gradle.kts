@@ -29,6 +29,7 @@ plugins {
 android {
     namespace = "io.github.yamin8000.gaugometer"
     compileSdk = 37
+    compileSdkMinor = 2
 
     defaultConfig {
         applicationId = "io.github.yamin8000.gaugometer"
